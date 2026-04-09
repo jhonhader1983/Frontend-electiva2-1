@@ -1,5 +1,6 @@
-import { useState } from "react"
-import api from "../api/axios"
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import api from "../api/axios";
 
 const inputStyle = {
   width: "100%",
@@ -12,7 +13,7 @@ const inputStyle = {
   color: "#1a1208",
   outline: "none",
   boxSizing: "border-box"
-}
+};
 
 const labelStyle = {
   fontSize: "0.75rem",
@@ -21,45 +22,72 @@ const labelStyle = {
   display: "block",
   marginBottom: "6px",
   letterSpacing: "0.5px"
-}
+};
 
 export default function Login() {
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState("")
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  const handleLogin = async () => {
-    setError("")
-    setLoading(true)
+  const navigate = useNavigate();
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setError("");
+    setLoading(true);
+
     try {
-      const res = await api.post("/auth/login", { email, password })
-      localStorage.setItem("token", res.data.token)
-      alert("Bienvenido a La Maison")
+      const res = await api.post("/auth/login", { email, password });
+      console.log("Respuesta:", res.data);
+      console.log("Rol:", res.data.usuario.rol);
+
+      localStorage.setItem("token", res.data.token);
+      localStorage.setItem("usuario", JSON.stringify(res.data.usuario));
+
+      if (res.data.usuario.rol === "admin") {
+        navigate("/admin");
+      } else {
+        navigate("/home");
+      }
+
     } catch (err) {
-      setError(err.response?.data?.error || "Error al iniciar sesión")
+      setError(err.response?.data?.error || "Error al iniciar sesión");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
-    <div>
+    <form onSubmit={handleLogin}>
       <h2 style={{ fontFamily: "Georgia, serif", fontSize: "1.4rem", color: "#1a1208", margin: "0 0 0.4rem" }}>
         Bienvenido de vuelta
       </h2>
+
       <p style={{ color: "#8a8a8a", fontSize: "0.85rem", margin: "0 0 1.8rem" }}>
         Inicia sesión para gestionar tu reserva
       </p>
 
       <div style={{ marginBottom: "1.2rem" }}>
         <label style={labelStyle}>Correo electrónico</label>
-        <input style={inputStyle} type="email" placeholder="correo@ejemplo.com" onChange={e => setEmail(e.target.value)} />
+        <input
+          style={inputStyle}
+          type="email"
+          placeholder="correo@ejemplo.com"
+          onChange={e => setEmail(e.target.value)}
+          required
+        />
       </div>
 
       <div style={{ marginBottom: "0.8rem" }}>
         <label style={labelStyle}>Contraseña</label>
-        <input style={inputStyle} type="password" placeholder="••••••••" onChange={e => setPassword(e.target.value)} />
+        <input
+          style={inputStyle}
+          type="password"
+          placeholder="••••••••"
+          onChange={e => setPassword(e.target.value)}
+          required
+        />
       </div>
 
       <p style={{ textAlign: "right", fontSize: "0.8rem", color: "#c9a84c", cursor: "pointer", margin: "0 0 1.5rem" }}>
@@ -67,11 +95,13 @@ export default function Login() {
       </p>
 
       {error && (
-        <p style={{ color: "#a32d2d", fontSize: "0.8rem", marginBottom: "1rem", textAlign: "center" }}>{error}</p>
+        <p style={{ color: "#a32d2d", fontSize: "0.8rem", marginBottom: "1rem", textAlign: "center" }}>
+          {error}
+        </p>
       )}
 
       <button
-        onClick={handleLogin}
+        type="submit"
         disabled={loading}
         style={{
           width: "100%",
@@ -90,6 +120,6 @@ export default function Login() {
       >
         {loading ? "Iniciando..." : "Iniciar sesión"}
       </button>
-    </div>
-  )
+    </form>
+  );
 }
