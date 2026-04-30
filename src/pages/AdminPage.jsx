@@ -111,7 +111,7 @@ function AdminPage() {
   return (
     <div style={{ minHeight: "100vh", background: "#0e0c08", color: "#f0e6d0", fontFamily: "Georgia, serif" }}>
 
-      {/* Header */}
+      
       <header style={{ background: "#1a1208", padding: "16px 40px", display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "1px solid #2e2416" }}>
         <div style={{ fontSize: "1.6rem", color: "#c9a84c", fontStyle: "italic", letterSpacing: "3px" }}>
           La Maison
@@ -124,7 +124,7 @@ function AdminPage() {
 
       <div style={{ maxWidth: "1000px", margin: "0 auto", padding: "40px 20px" }}>
 
-        {/* Tabs */}
+        
         <div style={{ display: "flex", gap: "0", marginBottom: "40px", borderBottom: "1px solid #2e2416" }}>
           {[
             { key: "productos", label: `PRODUCTOS (${productos.length})` },
@@ -142,10 +142,10 @@ function AdminPage() {
           ))}
         </div>
 
-        {/* Pestaña Productos */}
+        
         {pestana === "productos" && (
           <>
-            {/* Formulario */}
+            
             <div style={{ background: "#1a1208", borderRadius: "12px", border: "1px solid #2e2416", padding: "30px", marginBottom: "40px" }}>
               <h2 style={{ color: "#c9a84c", margin: "0 0 24px", fontSize: "1.3rem", letterSpacing: "1px" }}>
                 {editandoId ? "Editar producto" : "Agregar producto"}
@@ -175,7 +175,7 @@ function AdminPage() {
                   </div>
                   <div>
                     <label style={{ fontSize: "0.75rem", color: "#6a5020", display: "block", marginBottom: "6px", letterSpacing: "1px" }}>URL DE IMAGEN</label>
-                    <input style={inputStyle} placeholder="https://..." value={form.imagen} onChange={e => setForm({ ...form, imagen: e.target.value })} />
+                    <input style={inputStyle} placeholder="https:{/* Tabs */}..." value={form.imagen} onChange={e => setForm({ ...form, imagen: e.target.value })} />
                   </div>
                 </div>
 
@@ -205,7 +205,7 @@ function AdminPage() {
               </form>
             </div>
 
-            {/* Tabla productos */}
+            
             <div style={{ background: "#1a1208", borderRadius: "12px", border: "1px solid #2e2416", overflow: "hidden" }}>
               <div style={{ padding: "20px 30px", borderBottom: "1px solid #2e2416" }}>
                 <h2 style={{ color: "#c9a84c", margin: 0, fontSize: "1.2rem", letterSpacing: "1px" }}>
@@ -250,7 +250,7 @@ function AdminPage() {
           </>
         )}
 
-        {/* Pestaña Pedidos */}
+        
         {pestana === "pedidos" && (
           <div style={{ background: "#1a1208", borderRadius: "12px", border: "1px solid #2e2416", overflow: "hidden" }}>
             <div style={{ padding: "20px 30px", borderBottom: "1px solid #2e2416" }}>

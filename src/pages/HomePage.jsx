@@ -95,7 +95,7 @@ export default function HomePage() {
   return (
     <div style={{ minHeight: "100vh", background: "#0e0c08", color: "#f0e6d0", fontFamily: "Georgia, serif" }}>
 
-      {/* Header */}
+      
       <header style={{ background: "#1a1208", padding: "16px 40px", display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "1px solid #2e2416" }}>
         <div style={{ fontSize: "1.6rem", color: "#c9a84c", fontStyle: "italic", letterSpacing: "3px" }}>
           La Maison
@@ -115,13 +115,13 @@ export default function HomePage() {
         </div>
       </header>
 
-      {/* Hero */}
+      
       <div style={{ textAlign: "center", padding: "60px 20px 40px", borderBottom: "1px solid #2e2416" }}>
         <h1 style={{ fontSize: "2.5rem", color: "#c9a84c", fontStyle: "italic", margin: "0 0 10px" }}>Nuestro Menú</h1>
         <p style={{ color: "#8a8a8a", fontSize: "0.95rem" }}>Selecciona tus platos y realiza tu pedido</p>
       </div>
 
-      {/* Productos */}
+      
       <div style={{ maxWidth: "1100px", margin: "0 auto", padding: "40px 20px", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "24px" }}>
         {productos.length === 0 && (
           <p style={{ color: "#8a8a8a", gridColumn: "1/-1", textAlign: "center" }}>No hay productos disponibles aún.</p>
@@ -147,7 +147,7 @@ export default function HomePage() {
         ))}
       </div>
 
-      {/* Carrito lateral */}
+      
       <div style={{
         position: "fixed", top: 0, right: carritoAbierto ? 0 : "-400px",
         width: "360px", height: "100%", background: "#1a1208",
@@ -190,7 +190,7 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* Modal de entrega */}
+      
       {modalAbierto && (
         <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.8)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 2000 }}>
           <div style={{ background: "#1a1208", borderRadius: "16px", border: "1px solid #2e2416", padding: "36px", width: "100%", maxWidth: "440px" }}>
@@ -198,7 +198,7 @@ export default function HomePage() {
             <h2 style={{ color: "#c9a84c", margin: "0 0 6px", fontSize: "1.3rem", fontStyle: "italic" }}>Confirmar pedido</h2>
             <p style={{ color: "#6a5020", fontSize: "0.85rem", margin: "0 0 24px" }}>Total: <strong style={{ color: "#c9a84c" }}>${total.toLocaleString()}</strong></p>
 
-            {/* Tipo de entrega */}
+            
             <div style={{ display: "flex", gap: "10px", marginBottom: "20px" }}>
               {["domicilio", "presencial"].map(t => (
                 <button key={t} onClick={() => setTipoEntrega(t)} style={{
@@ -212,7 +212,7 @@ export default function HomePage() {
               ))}
             </div>
 
-            {/* Dirección o mesa */}
+            
             <div style={{ marginBottom: "16px" }}>
               <label style={{ fontSize: "0.75rem", color: "#6a5020", display: "block", marginBottom: "6px", letterSpacing: "1px" }}>
                 {tipoEntrega === "domicilio" ? "DIRECCIÓN DE ENTREGA" : "NÚMERO DE MESA"}
@@ -234,7 +234,7 @@ export default function HomePage() {
               )}
             </div>
 
-            {/* Contacto */}
+            
             <div style={{ marginBottom: "28px" }}>
               <label style={{ fontSize: "0.75rem", color: "#6a5020", display: "block", marginBottom: "6px", letterSpacing: "1px" }}>
                 NÚMERO DE CONTACTO
@@ -248,7 +248,7 @@ export default function HomePage() {
               />
             </div>
 
-            {/* Botones */}
+            
             <div style={{ display: "flex", gap: "12px" }}>
               <button onClick={() => setModalAbierto(false)}
                 style={{ flex: 1, padding: "12px", background: "none", border: "1px solid #3a2a10", color: "#8a8a8a", borderRadius: "6px", cursor: "pointer", fontFamily: "Georgia, serif" }}>
