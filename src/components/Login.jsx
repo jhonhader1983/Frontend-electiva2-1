@@ -1,28 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api/axios";
-
-const inputStyle = {
-  width: "100%",
-  padding: "10px 14px",
-  border: "0.5px solid #d4c5a0",
-  borderRadius: "6px",
-  fontFamily: "Georgia, serif",
-  fontSize: "0.9rem",
-  background: "#faf8f4",
-  color: "#1a1208",
-  outline: "none",
-  boxSizing: "border-box"
-};
-
-const labelStyle = {
-  fontSize: "0.75rem",
-  color: "#6a6a6a",
-  fontWeight: "500",
-  display: "block",
-  marginBottom: "6px",
-  letterSpacing: "0.5px"
-};
+import { Box, TextField, Button, Typography, Container, CircularProgress } from "@mui/material";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -59,67 +38,64 @@ export default function Login() {
   };
 
   return (
-    <form onSubmit={handleLogin}>
-      <h2 style={{ fontFamily: "Georgia, serif", fontSize: "1.4rem", color: "#1a1208", margin: "0 0 0.4rem" }}>
-        Bienvenido de vuelta
-      </h2>
+    <Container maxWidth="xs" sx={{ mt: 8, p: 4, bgcolor: 'background.paper', borderRadius: 2, boxShadow: 3 }}>
+      <Box component="form" onSubmit={handleLogin} sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+        <Typography variant="h5" component="h2" align="center" gutterBottom fontWeight="bold">
+          Bienvenido de vuelta
+        </Typography>
 
-      <p style={{ color: "#8a8a8a", fontSize: "0.85rem", margin: "0 0 1.8rem" }}>
-        Inicia sesión para gestionar tu reserva
-      </p>
+        <Typography variant="body2" color="text.secondary" align="center" sx={{ mb: 2 }}>
+          Inicia sesión para gestionar tu reserva
+        </Typography>
 
-      <div style={{ marginBottom: "1.2rem" }}>
-        <label style={labelStyle}>Correo electrónico</label>
-        <input
-          style={inputStyle}
+        <TextField
+          label="Correo electrónico"
           type="email"
+          variant="outlined"
+          fullWidth
+          required
           placeholder="correo@ejemplo.com"
-          onChange={e => setEmail(e.target.value)}
-          required
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
         />
-      </div>
 
-      <div style={{ marginBottom: "0.8rem" }}>
-        <label style={labelStyle}>Contraseña</label>
-        <input
-          style={inputStyle}
+        <TextField
+          label="Contraseña"
           type="password"
-          placeholder="••••••••"
-          onChange={e => setPassword(e.target.value)}
+          variant="outlined"
+          fullWidth
           required
+          placeholder="••••••••"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
         />
-      </div>
 
-      <p style={{ textAlign: "right", fontSize: "0.8rem", color: "#c9a84c", cursor: "pointer", margin: "0 0 1.5rem" }}>
-        ¿Olvidaste tu contraseña?
-      </p>
+        <Typography 
+          variant="caption" 
+          color="primary" 
+          align="right" 
+          sx={{ cursor: "pointer", fontWeight: "bold" }}
+        >
+          ¿Olvidaste tu contraseña?
+        </Typography>
 
-      {error && (
-        <p style={{ color: "#a32d2d", fontSize: "0.8rem", marginBottom: "1rem", textAlign: "center" }}>
-          {error}
-        </p>
-      )}
+        {error && (
+          <Typography variant="body2" color="error" align="center">
+            {error}
+          </Typography>
+        )}
 
-      <button
-        type="submit"
-        disabled={loading}
-        style={{
-          width: "100%",
-          padding: "12px",
-          background: loading ? "#3a2a10" : "#1a1208",
-          color: "#c9a84c",
-          border: "none",
-          borderRadius: "6px",
-          fontFamily: "Georgia, serif",
-          fontSize: "1rem",
-          fontWeight: "700",
-          cursor: loading ? "not-allowed" : "pointer",
-          letterSpacing: "1px",
-          transition: "background 0.2s"
-        }}
-      >
-        {loading ? "Iniciando..." : "Iniciar sesión"}
-      </button>
-    </form>
+        <Button
+          type="submit"
+          variant="contained"
+          size="large"
+          fullWidth
+          disabled={loading}
+          sx={{ mt: 1, py: 1.5, fontWeight: "bold" }}
+        >
+          {loading ? <CircularProgress size={24} color="inherit" /> : "Iniciar sesión"}
+        </Button>
+      </Box>
+    </Container>
   );
 }

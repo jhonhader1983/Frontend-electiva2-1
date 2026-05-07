@@ -2,6 +2,17 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import AuthPage from "./pages/AuthPage";
 import AdminPage from "./pages/AdminPage";
 import HomePage from "./pages/HomePage";
+import { ThemeProvider, createTheme, CssBaseline } from "@mui/material";
+
+const theme = createTheme({
+  colorSchemes: {
+    light: true,
+    dark: true,
+  },
+  typography: {
+    fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+  },
+});
 
 const RutaAdmin = ({ children }) => {
   const token = localStorage.getItem("token");
@@ -31,29 +42,32 @@ const RutaUsuario = ({ children }) => {
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<AuthPage />} />
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<AuthPage />} />
 
-        <Route
-          path="/admin"
-          element={
-            <RutaAdmin>
-              <AdminPage />
-            </RutaAdmin>
-          }
-        />
+          <Route
+            path="/admin"
+            element={
+              <RutaAdmin>
+                <AdminPage />
+              </RutaAdmin>
+            }
+          />
 
-        <Route
-          path="/home"
-          element={
-            <RutaUsuario>
-              <HomePage />
-            </RutaUsuario>
-          }
-        />
-      </Routes>
-    </BrowserRouter>
+          <Route
+            path="/home"
+            element={
+              <RutaUsuario>
+                <HomePage />
+              </RutaUsuario>
+            }
+          />
+        </Routes>
+      </BrowserRouter>
+    </ThemeProvider>
   );
 }
 

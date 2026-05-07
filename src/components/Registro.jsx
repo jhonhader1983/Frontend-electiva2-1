@@ -1,27 +1,6 @@
 import { useState } from "react"
 import api from "../api/axios"
-
-const inputStyle = {
-  width: "100%",
-  padding: "10px 14px",
-  border: "0.5px solid #d4c5a0",
-  borderRadius: "6px",
-  fontFamily: "Georgia, serif",
-  fontSize: "0.9rem",
-  background: "#faf8f4",
-  color: "#1a1208",
-  outline: "none",
-  boxSizing: "border-box"
-}
-
-const labelStyle = {
-  fontSize: "0.75rem",
-  color: "#6a6a6a",
-  fontWeight: "500",
-  display: "block",
-  marginBottom: "6px",
-  letterSpacing: "0.5px"
-}
+import { Box, TextField, Button, Typography, Container, CircularProgress } from "@mui/material";
 
 export default function Registro({ onRegistrado }) {
   const [nombre, setNombre] = useState("")
@@ -30,7 +9,8 @@ export default function Registro({ onRegistrado }) {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
 
-  const handleRegistro = async () => {
+  const handleRegistro = async (e) => {
+    if (e) e.preventDefault();
     setError("")
     setLoading(true)
     try {
@@ -45,53 +25,66 @@ export default function Registro({ onRegistrado }) {
   }
 
   return (
-    <div>
-      <h2 style={{ fontFamily: "Georgia, serif", fontSize: "1.4rem", color: "#1a1208", margin: "0 0 0.4rem" }}>
-        Crea tu cuenta
-      </h2>
-      <p style={{ color: "#8a8a8a", fontSize: "0.85rem", margin: "0 0 1.8rem" }}>
-        Regístrate para hacer tu reserva
-      </p>
+    <Container maxWidth="xs" sx={{ mt: 8, p: 4, bgcolor: 'background.paper', borderRadius: 2, boxShadow: 3 }}>
+      <Box component="form" onSubmit={handleRegistro} sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+        <Typography variant="h5" component="h2" align="center" gutterBottom fontWeight="bold">
+          Crea tu cuenta
+        </Typography>
 
-      <div style={{ marginBottom: "1.2rem" }}>
-        <label style={labelStyle}>Nombre completo</label>
-        <input style={inputStyle} type="text" placeholder="Tu nombre" onChange={e => setNombre(e.target.value)} />
-      </div>
+        <Typography variant="body2" color="text.secondary" align="center" sx={{ mb: 2 }}>
+          Regístrate para hacer tu reserva
+        </Typography>
 
-      <div style={{ marginBottom: "1.2rem" }}>
-        <label style={labelStyle}>Correo electrónico</label>
-        <input style={inputStyle} type="email" placeholder="correo@ejemplo.com" onChange={e => setEmail(e.target.value)} />
-      </div>
+        <TextField
+          label="Nombre completo"
+          type="text"
+          variant="outlined"
+          fullWidth
+          required
+          placeholder="Tu nombre"
+          value={nombre}
+          onChange={e => setNombre(e.target.value)}
+        />
 
-      <div style={{ marginBottom: "1.5rem" }}>
-        <label style={labelStyle}>Contraseña</label>
-        <input style={inputStyle} type="password" placeholder="••••••••" onChange={e => setPassword(e.target.value)} />
-      </div>
+        <TextField
+          label="Correo electrónico"
+          type="email"
+          variant="outlined"
+          fullWidth
+          required
+          placeholder="correo@ejemplo.com"
+          value={email}
+          onChange={e => setEmail(e.target.value)}
+        />
 
-      {error && (
-        <p style={{ color: "#a32d2d", fontSize: "0.8rem", marginBottom: "1rem", textAlign: "center" }}>{error}</p>
-      )}
+        <TextField
+          label="Contraseña"
+          type="password"
+          variant="outlined"
+          fullWidth
+          required
+          placeholder="••••••••"
+          value={password}
+          onChange={e => setPassword(e.target.value)}
+        />
 
-      <button
-        onClick={handleRegistro}
-        disabled={loading}
-        style={{
-          width: "100%",
-          padding: "12px",
-          background: loading ? "#3a2a10" : "#1a1208",
-          color: "#c9a84c",
-          border: "none",
-          borderRadius: "6px",
-          fontFamily: "Georgia, serif",
-          fontSize: "1rem",
-          fontWeight: "700",
-          cursor: loading ? "not-allowed" : "pointer",
-          letterSpacing: "1px",
-          transition: "background 0.2s"
-        }}
-      >
-        {loading ? "Registrando..." : "Crear cuenta"}
-      </button>
-    </div>
+        {error && (
+          <Typography variant="body2" color="error" align="center">
+            {error}
+          </Typography>
+        )}
+
+        <Button
+          type="submit"
+          variant="contained"
+          size="large"
+          fullWidth
+          disabled={loading}
+          sx={{ mt: 1, py: 1.5, fontWeight: "bold" }}
+        >
+          {loading ? <CircularProgress size={24} color="inherit" /> : "Crear cuenta"}
+        </Button>
+      </Box>
+    </Container>
   )
 }
