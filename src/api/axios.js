@@ -1,7 +1,7 @@
 import axios from "axios"
 
 const api = axios.create({
-  baseURL: "baseURL: "https://backend-electiva2-1-txei.onrender.com/api""
+baseURL: "https://backend-electiva2-1-txei.onrender.com/api"
 })
 
 api.interceptors.request.use((config) => {
