@@ -1,7 +1,7 @@
 import axios from "axios"
 
 const api = axios.create({
-  baseURL: "http://localhost:3000", // o tu URL del backend
+  baseURL: import.meta.env.VITE_API_URL || "http://localhost:3000",
 })
 
 // ⭐ INTERCEPTOR: agrega el token a TODAS las peticiones
