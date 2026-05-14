@@ -678,6 +678,14 @@ export default function AuthPage() {
   const [regError, setRegError] = useState("")
   const [regSuccess, setRegSuccess] = useState("")
 
+  // ===== FORGOT PASSWORD STATE =====
+  const [resetEmail, setResetEmail] = useState("")
+  const [resetCode, setResetCode] = useState("")
+  const [newPassword, setNewPassword] = useState("")
+  const [resetLoading, setResetLoading] = useState(false)
+  const [resetError, setResetError] = useState("")
+  const [resetSuccess, setResetSuccess] = useState("")
+
   // ===== HANDLERS =====
   const handleLogin = async (e) => {
     e.preventDefault()
@@ -779,6 +787,47 @@ export default function AuthPage() {
     if (score <= 2) return { level: score, text: "Débil", class: "weak" }
     if (score <= 3) return { level: score, text: "Media", class: "medium" }
     return { level: score, text: "Fuerte", class: "strong" }
+  }
+
+  const handleForgotPassword = async (e) => {
+    e.preventDefault()
+    setResetError("")
+    setResetSuccess("")
+    setResetLoading(true)
+    try {
+      const res = await api.post("/auth/forgot-password", { email: resetEmail })
+      setResetSuccess("Código enviado a tu correo. Revisa tu bandeja de entrada.")
+      setTimeout(() => {
+        setTab("verify")
+        setResetSuccess("")
+      }, 2000)
+    } catch (err) {
+      setResetError(err.response?.data?.error || "Error al solicitar el código")
+    } finally {
+      setResetLoading(false)
+    }
+  }
+
+  const handleResetPassword = async (e) => {
+    e.preventDefault()
+    setResetError("")
+    setResetSuccess("")
+    setResetLoading(true)
+    try {
+      await api.post("/auth/reset-password", { email: resetEmail, code: resetCode, newPassword })
+      setResetSuccess("Contraseña actualizada exitosamente.")
+      setTimeout(() => {
+        setTab("login")
+        setResetSuccess("")
+        setResetEmail("")
+        setResetCode("")
+        setNewPassword("")
+      }, 2000)
+    } catch (err) {
+      setResetError(err.response?.data?.error || "Código inválido o error al actualizar")
+    } finally {
+      setResetLoading(false)
+    }
   }
 
   const strength = getPasswordStrength(regPassword)
@@ -929,7 +978,7 @@ export default function AuthPage() {
                       />
                       Recordarme
                     </label>
-                    <button type="button" className="auth-forgot">
+                    <button type="button" className="auth-forgot" onClick={() => { setTab("forgot"); setError(""); setResetError(""); setResetSuccess(""); }}>
                       ¿Olvidaste tu contraseña?
                     </button>
                   </div>
@@ -1127,6 +1176,135 @@ export default function AuthPage() {
                   onClick={() => { setTab("login"); setRegError(""); setRegSuccess(""); }}
                 >
                   Iniciar sesión
+                </button>
+              </>
+            )}
+
+            {/* ===== FORMULARIO RECUPERAR CONTRASEÑA ===== */}
+            {tab === "forgot" && (
+              <>
+                <div style={{ marginBottom: '20px' }}>
+                  <h3 style={{ color: 'var(--crema)', fontSize: '0.9rem', marginBottom: '8px' }}>Recuperar Contraseña</h3>
+                  <p style={{ color: 'var(--tenue)', fontSize: '0.7rem' }}>Ingresa tu correo y te enviaremos un código de verificación.</p>
+                </div>
+                <form onSubmit={handleForgotPassword}>
+                  <div className="auth-field">
+                    <label className="auth-label">Correo electrónico</label>
+                    <div className="auth-input-wrap">
+                      <input
+                        className="auth-input"
+                        type="email"
+                        placeholder="correo@ejemplo.com"
+                        required
+                        value={resetEmail}
+                        onChange={e => setResetEmail(e.target.value)}
+                      />
+                      <div className="auth-input-icon"><EmailIcon /></div>
+                    </div>
+                  </div>
+
+                  {resetError && (
+                    <div className="auth-error">
+                      <ErrorIcon />
+                      {resetError}
+                    </div>
+                  )}
+
+                  {resetSuccess && (
+                    <div className="auth-success">
+                      <CheckIcon />
+                      {resetSuccess}
+                    </div>
+                  )}
+
+                  <button className="auth-btn" type="submit" disabled={resetLoading}>
+                    {resetLoading
+                      ? <><div className="auth-spinner" /> Enviando...</>
+                      : <>Enviar código <ArrowIcon /></>
+                    }
+                  </button>
+                </form>
+
+                <div className="auth-sep">
+                  <div className="auth-sep-line" />
+                </div>
+                <button
+                  className="auth-switch-btn"
+                  onClick={() => { setTab("login"); setResetError(""); setResetSuccess(""); }}
+                >
+                  Volver al inicio de sesión
+                </button>
+              </>
+            )}
+
+            {/* ===== FORMULARIO VERIFICAR CÓDIGO ===== */}
+            {tab === "verify" && (
+              <>
+                <div style={{ marginBottom: '20px' }}>
+                  <h3 style={{ color: 'var(--crema)', fontSize: '0.9rem', marginBottom: '8px' }}>Nueva Contraseña</h3>
+                  <p style={{ color: 'var(--tenue)', fontSize: '0.7rem' }}>Ingresa el código que enviamos a tu correo y tu nueva contraseña.</p>
+                </div>
+                <form onSubmit={handleResetPassword}>
+                  <div className="auth-field">
+                    <label className="auth-label">Código de verificación</label>
+                    <div className="auth-input-wrap">
+                      <input
+                        className="auth-input"
+                        type="text"
+                        placeholder="123456"
+                        required
+                        value={resetCode}
+                        onChange={e => setResetCode(e.target.value)}
+                      />
+                      <div className="auth-input-icon"><LockIcon /></div>
+                    </div>
+                  </div>
+                  
+                  <div className="auth-field">
+                    <label className="auth-label">Nueva Contraseña</label>
+                    <div className="auth-input-wrap">
+                      <input
+                        className="auth-input"
+                        type="password"
+                        placeholder="••••••••"
+                        required
+                        value={newPassword}
+                        onChange={e => setNewPassword(e.target.value)}
+                      />
+                      <div className="auth-input-icon"><LockIcon /></div>
+                    </div>
+                  </div>
+
+                  {resetError && (
+                    <div className="auth-error">
+                      <ErrorIcon />
+                      {resetError}
+                    </div>
+                  )}
+
+                  {resetSuccess && (
+                    <div className="auth-success">
+                      <CheckIcon />
+                      {resetSuccess}
+                    </div>
+                  )}
+
+                  <button className="auth-btn" type="submit" disabled={resetLoading}>
+                    {resetLoading
+                      ? <><div className="auth-spinner" /> Verificando...</>
+                      : <>Cambiar contraseña <ArrowIcon /></>
+                    }
+                  </button>
+                </form>
+
+                <div className="auth-sep">
+                  <div className="auth-sep-line" />
+                </div>
+                <button
+                  className="auth-switch-btn"
+                  onClick={() => { setTab("login"); setResetError(""); setResetSuccess(""); }}
+                >
+                  Cancelar
                 </button>
               </>
             )}
